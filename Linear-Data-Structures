@@ -1,0 +1,248 @@
+Delete the elements in an linked list whose sum is equal to zero
+ANS: To delete the elements whose sum is equal to zero, we can use a hash table to keep track of the prefix sum of the linked list. We traverse the linked list and keep track of the current sum. If the current sum is not in the hash table, we add it to the hash table. Otherwise, we remove the nodes between the two occurrences of the same sum.
+Here is the Python code to achieve this: 
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def deleteZeroSumSublists(head: ListNode) -> ListNode:
+    dummy = ListNode(0)
+    dummy.next = head
+    curr_sum = 0
+    d = {0: dummy}
+    
+    while head:
+        curr_sum += head.val
+        if curr_sum in d:
+            prev = d[curr_sum]
+            remove = prev.next
+            while remove != head:
+                curr_sum += remove.val
+                del d[curr_sum]
+                remove = remove.next
+            prev.next = head.next
+        else:
+            d[curr_sum] = head
+        head = head.next
+        
+    return dummy.next
+
+Reverse a linked list in groups of given size
+To reverse a linked list in groups of a given size, we can traverse the linked list, reversing each group of nodes as we encounter them. We keep track of the head and tail of the current group so that we can connect them to the next group.
+Here is the Python code to achieve this:
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def reverseKGroup(head: ListNode, k: int) -> ListNode:
+    dummy = ListNode(0)
+    dummy.next = head
+    prev = dummy
+    
+    while True:
+        curr = prev.next
+        tail = prev
+        for i in range(k):
+            tail = tail.next
+            if not tail:
+                return dummy.next
+        for i in range(k-1):
+            temp = prev.next
+            prev.next = curr.next
+            curr.next = curr.next.next
+            prev.next.next = temp
+        prev = curr
+    
+    return dummy.next
+
+Merge a linked list into another linked list at alternate positions.
+To merge a linked list into another linked list at alternate positions, we can traverse both lists simultaneously, inserting the nodes of the second list into the first list at alternate positions. We keep track of the previous node in the first list so that we can insert the nodes correctly.
+Here is the Python code to achieve this:
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def mergeAlternate(head1: ListNode, head2: ListNode) -> ListNode:
+    curr1 = head1
+    curr2 = head2
+    
+    while curr1 and curr2:
+        temp1 = curr1.next
+        temp2 = curr2.next
+        curr1.next = curr2
+        curr2.next = temp1
+        curr1 = temp1
+        curr2 = temp2
+    
+    return head1
+
+In an array, Count Pairs with given sum
+To count pairs with a given sum in an array, we can use a hash table to keep track of the occurrence of each number. We traverse the array, for each element, we check if its complement exists in the hash table. If it exists, we add the count of its complement to the total count.
+Here is the Python code: 
+def countPairsWithSum(arr, k):
+    d = {}
+    count = 0
+    
+    for num in arr:
+        complement = k - num
+        if complement in d:
+            count += d[complement]
+        if num in d:
+            d[num] += 1
+        else:
+            d[num] = 1
+    
+    return count
+
+Find duplicates in an array
+To find duplicates in an array, we can use a hash table to keep track of the occurrence of each number. We traverse the array, for each element, we check if its occurrence count is greater than 1. If it is, we add it to the list of duplicates.
+
+Here is the Python code to find duplicates in an array:
+def findDuplicates(arr):
+    d = {}
+    duplicates = []
+    
+    for num in arr:
+        if num in d:
+            d[num] += 1
+        else:
+            d[num] = 1
+            
+    for num in d:
+        if d[num] > 1:
+            duplicates.append(num)
+    
+    return duplicates
+
+Find the Kth largest and Kth smallest number in an array
+To find the Kth largest and Kth smallest number in an array, we can sort the array in ascending or descending order and then return the Kth smallest or largest number, respectively. Alternatively, we can use a min-heap or a max-heap data structure to efficiently find the Kth smallest or largest number, respectively.
+
+Here is the Python code to find the Kth largest and Kth smallest number in an array using sorting:
+def kthSmallest(arr, k):
+    arr.sort()
+    return arr[k-1]
+
+def kthLargest(arr, k):
+    arr.sort(reverse=True)
+    return arr[k-1]
+Here is the Python code to find the Kth smallest number in an array using a min-heap:
+import heapq
+
+def kthSmallest(arr, k):
+    heap = arr[:k]
+    heapq.heapify(heap)
+    
+    for num in arr[k:]:
+        if num < heap[0]:
+            heapq.heappop(heap)
+            heapq.heappush(heap, num)
+            
+    return heap[0]
+Here is the Python code to find the Kth largest number in an array using a max-heap:
+import heapq
+
+def kthLargest(arr, k):
+    heap = [-num for num in arr[:k]]
+    heapq.heapify(heap)
+    
+    for num in arr[k:]:
+        if num > -heap[0]:
+            heapq.heappop(heap)
+            heapq.heappush(heap, -num)
+            
+    return -heap[0]
+
+Move all the negative elements to one side of the array
+To move all the negative elements to one side of the array, we can use the two-pointer technique. We maintain two pointers, left and right, initially pointing to the beginning and end of the array, respectively. We then traverse the array, for each element we check if it is negative. If it is, we swap it with the element at index left and increment left. If it is positive, we swap it with the element at index right and decrement right. We repeat this process until left and right cross each other.
+
+Here is the Python code to move all the negative elements to one side of the array:
+def moveNegatives(arr):
+    left = 0
+    right = len(arr) - 1
+    
+    while left <= right:
+        if arr[left] < 0:
+            left += 1
+        else:
+            arr[left], arr[right] = arr[right], arr[left]
+            right -= 1
+    
+    return arr
+
+Reverse a string using a stack data structure
+To reverse a string using a stack data structure, we can push each character of the string onto a stack, and then pop them out of the stack in reverse order to create the reversed string.
+
+Here is the Python code to reverse a string using a stack:
+def reverseString(s):
+    stack = []
+    for c in s:
+        stack.append(c)
+    
+    reversed_s = ''
+    while stack:
+        reversed_s += stack.pop()
+    
+    return reversed_s
+Here is the modified Python code to reverse a string using a list as a stack:
+def reverseString(s):
+    stack = list(s)
+    
+    reversed_s = ''
+    while stack:
+        reversed_s += stack.pop()
+    
+    return reversed_s
+
+Evaluate a postfix expression using stack
+To evaluate a postfix expression using a stack, we can use the following algorithm:
+
+Create an empty stack to store the operands.
+Iterate through each character in the postfix expression.
+If the character is an operand (a number), push it onto the stack.
+If the character is an operator (+, -, *, /), pop the top two elements from the stack, perform the operation, and push the result back onto the stack.
+After iterating through all the characters, the final result will be on top of the stack. Pop it from the stack and return it.
+Here is the Python code to evaluate a postfix expression using a stack:
+def evaluatePostfix(expr):
+    stack = []
+    
+    for c in expr:
+        if c.isdigit():
+            stack.append(int(c))
+        else:
+            op2 = stack.pop()
+            op1 = stack.pop()
+            if c == '+':
+                result = op1 + op2
+            elif c == '-':
+                result = op1 - op2
+            elif c == '*':
+                result = op1 * op2
+            elif c == '/':
+                result = op1 / op2
+            stack.append(result)
+    
+    return stack.pop()
+
+Implement a queue using the stack data structure
+We can implement a queue using two stacks. The first stack will be used to enqueue elements, and the second stack will be used to dequeue elements.
+
+Here is the Python code to implement a queue using two stacks:
+class Queue:
+    def __init__(self):
+        self.in_stack = []
+        self.out_stack = []
+    
+    def enqueue(self, val):
+        self.in_stack.append(val)
+    
+    def dequeue(self):
+        if not self.out_stack:
+            while self.in_stack:
+                self.out_stack.append(self.in_stack.pop())
+        return self.out_stack.pop()
+    
+    def is_empty(self):
+        return not (self.in_stack or self.out_stack)
