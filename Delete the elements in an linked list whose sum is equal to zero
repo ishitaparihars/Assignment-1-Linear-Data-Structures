@@ -1,0 +1,26 @@
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def deleteZeroSumSublists(head: ListNode) -> ListNode:
+    dummy = ListNode(0)
+    dummy.next = head
+    curr_sum = 0
+    d = {0: dummy}
+
+    while head:
+        curr_sum += head.val
+        if curr_sum in d:
+            prev = d[curr_sum]
+            remove = prev.next
+            while remove != head:
+                curr_sum += remove.val
+                del d[curr_sum]
+                remove = remove.next
+            prev.next = head.next
+        else:
+            d[curr_sum] = head
+        head = head.next
+
+    return dummy.next
